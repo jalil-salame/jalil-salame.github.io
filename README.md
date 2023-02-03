@@ -1,3 +1,3 @@
 # jalil-salame.github.io
 
-Code to my [github page](jalil-salame.github.io), WIP
+Code to my [github page](https://jalil-salame.github.io), WIP
