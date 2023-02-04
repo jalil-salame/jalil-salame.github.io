@@ -1,6 +1,7 @@
+title = "Jalil's Page"
 # The URL the site will be built for
 base_url = "https://jalil-salame.github.io"
-theme = "dose"
+theme = "kangae"
 
 # Whether to automatically compile all Sass files in the sass directory
 compile_sass = true
@@ -14,7 +15,18 @@ build_search_index = false
 highlight_code = true
 
 [extra]
-social_media = [
-    {name = "GitHub", url = "https://github.com/jalil-salame"},
-    {name = "Mastodon", url = "https://mas.to/@teivel"},
+author = "Jalil David Salamé Messina"
+username = "jalil-salame"
+navbar = [
+  { name = "Mastodon", url = "https://mas.to/@teivel", rel="me" },
+  { name = "Github", url = "https://github.com/jalil-salame", rel="me" }
 ]
+
+[extra.content_license]
+spdx = "CC BY-NC-SA 4.0"
+url = "https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode.txt"
+
+[extra.source_license]
+spdx = "MIT"
+url = "https://mit-license.org"
+src_url = "https://github.com/jalil-salame/jalil-salame.github.io"
