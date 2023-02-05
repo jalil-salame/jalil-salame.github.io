@@ -1,6 +1,8 @@
 +++
 title = "(WIP) N-Sudoku Solver"
 date = "2023-02-04"
+description = "A Generalized Sudoku solver In Rust"
+tags = ["sudoku", "rust", "programming"]
 +++
 
 This is a (WIP) blog post about my sudoku solver:
@@ -42,27 +44,45 @@ There is an example implementation at
 which looks something like this:
 
 ```rust
-pub fn naive_dfs(mut sudoku: super::Sudoku) -> SudokuResult {
+pub fn naive_dfs(sudoku: &mut  Sudoku) -> ControlFlow<()> {
     let order = sudoku.order();
+    // Find an empty cell
     let Some((ix, _)) = sudoku.0.indexed_iter().find(|(_, value)| value.is_none())
     else {
+        // No Cells are empty
         if sudoku.solved() {
-            return ControlFlow::Break(sudoku);
+            // Found a valid solution
+            return ControlFlow::Break(());
         } else {
+            // No valid solution, Continue
             return ControlFlow::Continue(());
         }
     };
 
+    // Try all possible values 1..=N
     for value in 1..=order as u8 {
         *sudoku.0.get_mut(ix).unwrap() = SudokuValue(Some(value.try_into().unwrap()));
 
+        // This value produces a valid sudoku
         if sudoku.valid() {
-            sudoku = naive_dfs(sudoku)?;
+            naive_dfs(sudoku)?; // If a solution is found (Break(sudoku)) then return early
         }
     }
-
+    // Reset Cell to empty
     *sudoku.0.get_mut(ix).unwrap() = SudokuValue(None);
 
     ControlFlow::Continue(())
 }
 ```
+
+One nice property of this solution, is that only one sudoku needs to be created
+thus the memory usage is proportinal to the size of the sudoku: `N²` cells, and
+at most `N²` stack frames.
+
+The only problem with this solution is how wasteful it is; we can precalculate
+what values are possible, thus we don't need to check all values `1..=N`, and
+just check the possible set, whenever we set a value, we can update this
+possible set, which in turn getes rid of all the `sudoku.valid()` calls.
+
+It is only worth it if calculating the original possibilities and then updating
+them is cheap.
