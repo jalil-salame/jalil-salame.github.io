@@ -10,7 +10,7 @@ This is a (WIP) blog post about my sudoku solver:
 
 If you somehow don't know how a Sudoku puzzle works, you can check out the
 [wikipedia page](https://en.wikipedia.org/wiki/Sudoku), or check out my (very
-simplified explanation:
+simplified) explanation:
 
 A Sudoku is a puzzle where you try to fill up the empty cells with symbols based
 on rules.
