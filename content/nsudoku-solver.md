@@ -26,6 +26,21 @@ mega-cell.
 As each of those constructs has exactly `N=k²` cells, you need only `N` symbols
 (usually the numbers `[1,2,...,N]`).
 
+A naive calculation of the number of possible valid sudokus is `N^(N²)`, as
+there are `N` possible values per cell (and there are `N²` cells), for a `9×9`
+sudoku this comes out to be a bit less than `2×10⁷⁷`.
+
+A better approximation of the number of valids sudokus is reached by knowing that
+each row contains no duplicate numbers you have `N` possibilities for the first
+cell in the row, but only `N-1` for the second, this tells us, that a tighter
+bound can be obtained with `N!×N`, there are `N!` possible rows, and there are
+`N` rows in total. This gives us `3265920` as an upper bound for the `9x9`
+sudoku states.
+
+This huge number of valid sudokus means that heavy prunning of the possibility
+space needs to be done in order to be able to solve it efficiently for moderatly
+large values of `k`.
+
 ## Solving the Sudoku
 
 ### The Naive Way
