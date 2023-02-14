@@ -59,7 +59,7 @@ There is an example implementation at
 which looks something like this:
 
 ```rust
-pub fn naive_dfs(sudoku: &mut  Sudoku) -> ControlFlow<()> {
+pub fn naive_solve(sudoku: &mut  Sudoku) -> ControlFlow<()> {
     let order = sudoku.order();
     // Find an empty cell
     let Some((ix, _)) = sudoku.0.indexed_iter().find(|(_, value)| value.is_none())
@@ -80,7 +80,7 @@ pub fn naive_dfs(sudoku: &mut  Sudoku) -> ControlFlow<()> {
 
         // This value produces a valid sudoku
         if sudoku.valid() {
-            naive_dfs(sudoku)?; // If a solution is found (Break(sudoku)) then return early
+            naive_solve(sudoku)?; // If a solution is found (Break(sudoku)) then return early
         }
     }
     // Reset Cell to empty
@@ -101,3 +101,141 @@ possible set, which in turn getes rid of all the `sudoku.valid()` calls.
 
 It is only worth it if calculating the original possibilities and then updating
 them is cheap.
+
+### Prunning the Possibilities
+
+We naively defined a `SudokuValue` as:
+
+```rust
+#[derive(Debug, Default, Clone, Copy, PartialEq, Eq)]
+struct SudokuValue(Option<NonZeroU8>);
+```
+
+We use `NonZeroU8` to take advantage of the niche filling optimization from
+`Option`, this way `mem::sizeof<Option<NonZeroU8>>() == mem::sizeof<u8>`.
+
+To adapt to our new definition we will instead use:
+
+```rust
+#[derive(Debug, Clone)]
+enum AugmentedValue {
+    Fixed(NonZeroU8),
+    Possible(HashSet<NonZeroU8>),
+}
+```
+
+The `NonZeroU8` is no longer needed, but as `0` is not a valid Sudoku value, we
+will keep it.
+
+To match with this `AugmentedValue`, we will create an `AugmentedSudoku` that
+uses `AugmentedValue`s instead.
+
+We can now transparently convert between a `Sudoku` and an `AugmentedSudoku`:
+
+```rust
+impl From<Sudoku> for AugmentedSudoku {
+    fn from(value: Sudoku) -> Self {
+        let all: HashSet<NonZeroU8> = (1..=value.order()).collect();
+        Self::new(value.data.mapv_into_any(|val| {
+            if let Some(value) = val.0 {
+                AugmentedValue::Fixed(value)
+            } else {
+                AugmentedValue::Possible(all.clone())
+            }
+        }))
+    }
+}
+
+impl From<AugmentedValue> for SudokuValue {
+    fn from(value: AugmentedValue) -> Self {
+        if let AugmentedValue::Fixed(value) = value {
+            SudokuValue(Some(value))
+        } else {
+            SudokuValue(None)
+        }
+    }
+}
+
+impl From<AugmentedSudoku> for Sudoku {
+    fn from(value: AugmentedSudoku) -> Self {
+        Self::new(value.data.mapv_into_any(|val| val.into()))
+    }
+}
+```
+
+We can now implement our solve based on the `AugmentedSudoku`:
+
+```rust
+fn augmented_solve(sudoku: &mut AugmentedSudoku) -> ControlFlow<()> {
+    let Some((ix, possible)) = sudoku.data.indexed_iter().find_map(|(ix, val)| {
+        if let AugmentedValue::Possible(val) = val {
+            Some(val.clone())
+        } else {
+            None
+        }
+    }) else {
+        if sudoku.solved() {
+            return ControlFlow::Break(());
+        } else {
+            return ControlFlow::Continue(());
+        }
+    };
+
+    for value in possible {
+        *sudoku.data.get_mut(ix).unwrap() = AugmentedValue::Fixed(value);
+
+        if sudoku.valid() {
+            augmented_solve(sudoku)?;
+        }
+    }
+
+    *sudoku.data.get_mut(ix).unwrap() = AugmentedValue::Possible((1..=sudoku.order()).collect());
+
+    ControlFlow::Continue(())
+}
+```
+
+But this is basically a copy paste of the `naive_solve` algorithm, the value
+from this is that we can update the `possible` set in a cheaper way  while
+culling the a huge amount of possibilities:
+
+```rust
+impl AugmentedSudoku {
+    fn prune(&mut self) {
+        let fixed_cols = self.data.columns().map(|col| {
+            col.filter_map(|val| {
+                if let AugmentedValue::Fixed(val) = val {
+                    Some(val)
+                } else {
+                    None
+                }
+            }).collect::<HashSet<_>>()
+        });
+
+        // Remove fixed values in the same column
+        for col, fixed in self.data.mut_columns().zip(fixed_cols.into_iter()) {
+            for value in col.iter_mut() {
+                if let AugmentedValue::Possible(set) = value {
+                    set -= fixed;
+                }
+            }
+        }
+
+        // Repeat for rows and cells
+    }
+}
+```
+
+We can also perform a cheaper prunning each time we fix a value:
+
+```rust
+impl AugmentedSudoku {
+    fn fix_value(&mut self, ix: usize, value: NonZeroU8) {
+        let (x, y, cell) = self.split_ix(ix);
+
+        self.remove_possible_value_from_column(x, value);
+        self.remove_possible_value_from_row(y, value);
+        self.remove_possible_value_from_cell(cell, value);
+    }
+}
+```
