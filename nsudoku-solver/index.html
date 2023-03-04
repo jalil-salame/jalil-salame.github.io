@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+        <meta content="text/html; charset=utf-8" http-equiv="content-type"/>
+        <meta content="width=device-width, initial-scale=1" name="viewport"/>
+
+        
+        <meta name="robots" content="index,follow">
+        <meta name="googlebot" content="index,follow">
+
+        <meta name="google" content="nositelinkssearchbox">
+        <meta name="google" content="notranslate">
+        
+
+        
+
+    <meta content="A Generalized Sudoku solver In Rust" name="description"/>
+
+
+
+        
+        <link href="https://jalil-salame.github.io/style.css" rel="stylesheet"/>
+        
+        <title>
+    (WIP) N-Sudoku Solver - Jalil&#x27;s Page
+</title>
+    </head>
+    <body>
+        <script>
+            function evaluate_prefers_color() {
+                if(localStorage.getItem('prefers-color') === 'dark') {
+                    document.body.classList.add('dark');
+                } else if(localStorage.getItem('prefers-color') === 'light') {
+                    document.body.classList.remove('dark');
+                } else if(window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                    document.body.classList.add('dark');
+                }
+            }
+            evaluate_prefers_color();
+        </script>
+        
+    <main class="article-content">
+        <p><a href="..">..</a>/nsudoku-solver</p>
+        
+        <h1>(WIP) N-Sudoku Solver</h1>
+        <p>Published: <time>2023-02-04</time></p>
+        
+        <hr />
+        <p>This is a (WIP) blog post about my sudoku solver:
+<a href="https://github.com/jalil-salame/nsudoku-solve">nsudoku-solve</a></p>
+<h1 id="sudoku">Sudoku</h1>
+<p>If you somehow don't know how a Sudoku puzzle works, you can check out the
+<a href="https://en.wikipedia.org/wiki/Sudoku">wikipedia page</a>, or check out my (very
+simplified) explanation:</p>
+<p>A Sudoku is a puzzle where you try to fill up the empty cells with symbols based
+on rules.</p>
+<p>The Sudoku board is <code>N×N</code> where <code>N=k²</code> and <code>k∈{2,3,4,...}</code>, the typical size is <code>9×9</code>
+(<code>k=3</code>).</p>
+<p>It has <code>k×k</code> mega-cells, each symbol may appear once per row, column, and
+mega-cell.</p>
+<p>As each of those constructs has exactly <code>N=k²</code> cells, you need only <code>N</code> symbols
+(usually the numbers <code>[1,2,...,N]</code>).</p>
+<p>A naive calculation of the number of possible valid sudokus is <code>N^(N²)</code>, as
+there are <code>N</code> possible values per cell (and there are <code>N²</code> cells), for a <code>9×9</code>
+sudoku this comes out to be a bit less than <code>2×10⁷⁷</code>.</p>
+<p>A better approximation of the number of valids sudokus is reached by knowing that
+each row contains no duplicate numbers you have <code>N</code> possibilities for the first
+cell in the row, but only <code>N-1</code> for the second, this tells us, that a tighter
+bound can be obtained with <code>N!×N</code>, there are <code>N!</code> possible rows, and there are
+<code>N</code> rows in total. This gives us <code>3265920</code> as an upper bound for the <code>9x9</code>
+sudoku states.</p>
+<p>This huge number of valid sudokus means that heavy prunning of the possibility
+space needs to be done in order to be able to solve it efficiently for moderatly
+large values of <code>k</code>.</p>
+<h2 id="solving-the-sudoku">Solving the Sudoku</h2>
+<h3 id="the-naive-way">The Naive Way</h3>
+<p>A very naive (badly performing) algorithm would look something like:</p>
+<ol>
+<li>Find an empty cell.
+<ul>
+<li>If no cell is found then check if it's solved and return the solved sudoku
+if it is, otherwise continue.</li>
+</ul>
+</li>
+<li>For each value <code>1..=N</code> try setting the empty cell to that value.
+<ul>
+<li>If the new sudoku is valid, continue from step 1</li>
+</ul>
+</li>
+<li>No solution was possible from this state.</li>
+</ol>
+<p>There is an example implementation at
+<a href="https://github.com/jalil-salame/nsudoku-solve/blob/main/src/sudoku/solve.rs">solve.rs</a>
+which looks something like this:</p>
+<pre data-lang="rust" style="background-color:#282828;color:#fdf4c1aa;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#fa5c4b;">pub fn </span><span style="color:#8ec07c;">naive_solve</span><span>(</span><span style="color:#fdf4c1;">sudoku</span><span>: </span><span style="color:#fe8019;">&amp;</span><span style="color:#fa5c4b;">mut</span><span>  Sudoku) -&gt; ControlFlow&lt;()&gt; {
+</span><span>    </span><span style="color:#fa5c4b;">let</span><span> order </span><span style="color:#fe8019;">=</span><span> sudoku.</span><span style="color:#fabd2f;">order</span><span>();
+</span><span>    </span><span style="font-style:italic;color:#928374;">// Find an empty cell
+</span><span>    </span><span style="color:#fa5c4b;">let </span><span style="color:#fabd2f;">Some</span><span>((ix, </span><span style="color:#fe8019;">_</span><span>)) </span><span style="color:#fe8019;">=</span><span> sudoku.</span><span style="color:#d3869b;">0.</span><span style="color:#fabd2f;">indexed_iter</span><span>().</span><span style="color:#fabd2f;">find</span><span>(|(_, </span><span style="color:#fdf4c1;">value</span><span>)| value.</span><span style="color:#fabd2f;">is_none</span><span>())
+</span><span>    </span><span style="color:#fa5c4b;">else </span><span>{
+</span><span>        </span><span style="font-style:italic;color:#928374;">// No Cells are empty
+</span><span>        </span><span style="color:#fa5c4b;">if</span><span> sudoku.</span><span style="color:#fabd2f;">solved</span><span>() {
+</span><span>            </span><span style="font-style:italic;color:#928374;">// Found a valid solution
+</span><span>            </span><span style="color:#fa5c4b;">return </span><span>ControlFlow::Break(());
+</span><span>        } </span><span style="color:#fa5c4b;">else </span><span>{
+</span><span>            </span><span style="font-style:italic;color:#928374;">// No valid solution, Continue
+</span><span>            </span><span style="color:#fa5c4b;">return </span><span>ControlFlow::Continue(());
+</span><span>        }
+</span><span>    };
+</span><span>
+</span><span>    </span><span style="font-style:italic;color:#928374;">// Try all possible values 1..=N
+</span><span>    </span><span style="color:#fa5c4b;">for</span><span> value </span><span style="color:#fe8019;">in </span><span style="color:#d3869b;">1</span><span style="color:#fe8019;">..=</span><span>order </span><span style="color:#fe8019;">as </span><span style="color:#fa5c4b;">u8 </span><span>{
+</span><span>        </span><span style="color:#fe8019;">*</span><span>sudoku.</span><span style="color:#d3869b;">0.</span><span style="color:#fabd2f;">get_mut</span><span>(ix).</span><span style="color:#fabd2f;">unwrap</span><span>() </span><span style="color:#fe8019;">=</span><span> SudokuValue(</span><span style="color:#fabd2f;">Some</span><span>(value.</span><span style="color:#fabd2f;">try_into</span><span>().</span><span style="color:#fabd2f;">unwrap</span><span>()));
+</span><span>
+</span><span>        </span><span style="font-style:italic;color:#928374;">// This value produces a valid sudoku
+</span><span>        </span><span style="color:#fa5c4b;">if</span><span> sudoku.</span><span style="color:#fabd2f;">valid</span><span>() {
+</span><span>            </span><span style="color:#fabd2f;">naive_solve</span><span>(sudoku)</span><span style="color:#fe8019;">?</span><span>; </span><span style="font-style:italic;color:#928374;">// If a solution is found (Break(sudoku)) then return early
+</span><span>        }
+</span><span>    }
+</span><span>    </span><span style="font-style:italic;color:#928374;">// Reset Cell to empty
+</span><span>    </span><span style="color:#fe8019;">*</span><span>sudoku.</span><span style="color:#d3869b;">0.</span><span style="color:#fabd2f;">get_mut</span><span>(ix).</span><span style="color:#fabd2f;">unwrap</span><span>() </span><span style="color:#fe8019;">=</span><span> SudokuValue(</span><span style="color:#fabd2f;">None</span><span>);
+</span><span>
+</span><span>    ControlFlow::Continue(())
+</span><span>}
+</span></code></pre>
+<p>One nice property of this solution, is that only one sudoku needs to be created
+thus the memory usage is proportinal to the size of the sudoku: <code>N²</code> cells, and
+at most <code>N²</code> stack frames.</p>
+<p>The only problem with this solution is how wasteful it is; we can precalculate
+what values are possible, thus we don't need to check all values <code>1..=N</code>, and
+just check the possible set, whenever we set a value, we can update this
+possible set, which in turn getes rid of all the <code>sudoku.valid()</code> calls.</p>
+<p>It is only worth it if calculating the original possibilities and then updating
+them is cheap.</p>
+<h3 id="prunning-the-possibilities">Prunning the Possibilities</h3>
+<p>We naively defined a <code>SudokuValue</code> as:</p>
+<pre data-lang="rust" style="background-color:#282828;color:#fdf4c1aa;" class="language-rust "><code class="language-rust" data-lang="rust"><span>#[</span><span style="color:#fdf4c1;">derive</span><span>(Debug, Default, Clone, Copy, PartialEq, Eq)]
+</span><span style="color:#fa5c4b;">struct </span><span style="color:#8ec07c;">SudokuValue</span><span>(</span><span style="color:#fabd2f;">Option</span><span>&lt;NonZeroU8&gt;);
+</span></code></pre>
+<p>We use <code>NonZeroU8</code> to take advantage of the niche filling optimization from
+<code>Option</code>, this way <code>mem::sizeof&lt;Option&lt;NonZeroU8&gt;&gt;() == mem::sizeof&lt;u8&gt;</code>.</p>
+<p>To adapt to our new definition we will instead use:</p>
+<pre data-lang="rust" style="background-color:#282828;color:#fdf4c1aa;" class="language-rust "><code class="language-rust" data-lang="rust"><span>#[</span><span style="color:#fdf4c1;">derive</span><span>(Debug, Clone)]
+</span><span style="color:#fa5c4b;">enum </span><span style="color:#8ec07c;">AugmentedValue </span><span>{
+</span><span>    Fixed(NonZeroU8),
+</span><span>    Possible(HashSet&lt;NonZeroU8&gt;),
+</span><span>}
+</span></code></pre>
+<p>The <code>NonZeroU8</code> is no longer needed, but as <code>0</code> is not a valid Sudoku value, we
+will keep it.</p>
+<p>To match with this <code>AugmentedValue</code>, we will create an <code>AugmentedSudoku</code> that
+uses <code>AugmentedValue</code>s instead.</p>
+<p>We can now transparently convert between a <code>Sudoku</code> and an <code>AugmentedSudoku</code>:</p>
+<pre data-lang="rust" style="background-color:#282828;color:#fdf4c1aa;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#fa5c4b;">impl </span><span style="color:#fabd2f;">From</span><span>&lt;Sudoku&gt; </span><span style="color:#fa5c4b;">for </span><span style="color:#8ec07c;">AugmentedSudoku </span><span>{
+</span><span>    </span><span style="color:#fa5c4b;">fn </span><span style="color:#8ec07c;">from</span><span>(</span><span style="color:#fdf4c1;">value</span><span>: Sudoku) -&gt; </span><span style="color:#fa5c4b;">Self </span><span>{
+</span><span>        </span><span style="color:#fa5c4b;">let</span><span> all: HashSet&lt;NonZeroU8&gt; </span><span style="color:#fe8019;">= </span><span>(</span><span style="color:#d3869b;">1</span><span style="color:#fe8019;">..=</span><span>value.</span><span style="color:#fabd2f;">order</span><span>()).</span><span style="color:#fabd2f;">collect</span><span>();
+</span><span>        </span><span style="color:#fa5c4b;">Self</span><span>::new(value.data.</span><span style="color:#fabd2f;">mapv_into_any</span><span>(|</span><span style="color:#fdf4c1;">val</span><span>| {
+</span><span>            </span><span style="color:#fa5c4b;">if let </span><span style="color:#fabd2f;">Some</span><span>(value) </span><span style="color:#fe8019;">=</span><span> val.</span><span style="color:#d3869b;">0 </span><span>{
+</span><span>                AugmentedValue::Fixed(value)
+</span><span>            } </span><span style="color:#fa5c4b;">else </span><span>{
+</span><span>                AugmentedValue::Possible(all.</span><span style="color:#fabd2f;">clone</span><span>())
+</span><span>            }
+</span><span>        }))
+</span><span>    }
+</span><span>}
+</span><span>
+</span><span style="color:#fa5c4b;">impl </span><span style="color:#fabd2f;">From</span><span>&lt;AugmentedValue&gt; </span><span style="color:#fa5c4b;">for </span><span style="color:#8ec07c;">SudokuValue </span><span>{
+</span><span>    </span><span style="color:#fa5c4b;">fn </span><span style="color:#8ec07c;">from</span><span>(</span><span style="color:#fdf4c1;">value</span><span>: AugmentedValue) -&gt; </span><span style="color:#fa5c4b;">Self </span><span>{
+</span><span>        </span><span style="color:#fa5c4b;">if let </span><span>AugmentedValue::Fixed(value) </span><span style="color:#fe8019;">=</span><span> value {
+</span><span>            SudokuValue(</span><span style="color:#fabd2f;">Some</span><span>(value))
+</span><span>        } </span><span style="color:#fa5c4b;">else </span><span>{
+</span><span>            SudokuValue(</span><span style="color:#fabd2f;">None</span><span>)
+</span><span>        }
+</span><span>    }
+</span><span>}
+</span><span>
+</span><span style="color:#fa5c4b;">impl </span><span style="color:#fabd2f;">From</span><span>&lt;AugmentedSudoku&gt; </span><span style="color:#fa5c4b;">for </span><span style="color:#8ec07c;">Sudoku </span><span>{
+</span><span>    </span><span style="color:#fa5c4b;">fn </span><span style="color:#8ec07c;">from</span><span>(</span><span style="color:#fdf4c1;">value</span><span>: AugmentedSudoku) -&gt; </span><span style="color:#fa5c4b;">Self </span><span>{
+</span><span>        </span><span style="color:#fa5c4b;">Self</span><span>::new(value.data.</span><span style="color:#fabd2f;">mapv_into_any</span><span>(|</span><span style="color:#fdf4c1;">val</span><span>| val.</span><span style="color:#fabd2f;">into</span><span>()))
+</span><span>    }
+</span><span>}
+</span></code></pre>
+<p>We can now implement our solve based on the <code>AugmentedSudoku</code>:</p>
+<pre data-lang="rust" style="background-color:#282828;color:#fdf4c1aa;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#fa5c4b;">fn </span><span style="color:#8ec07c;">augmented_solve</span><span>(</span><span style="color:#fdf4c1;">sudoku</span><span>: </span><span style="color:#fe8019;">&amp;</span><span style="color:#fa5c4b;">mut</span><span> AugmentedSudoku) -&gt; ControlFlow&lt;()&gt; {
+</span><span>    </span><span style="color:#fa5c4b;">let </span><span style="color:#fabd2f;">Some</span><span>((ix, possible)) </span><span style="color:#fe8019;">=</span><span> sudoku.data.</span><span style="color:#fabd2f;">indexed_iter</span><span>().</span><span style="color:#fabd2f;">find_map</span><span>(|(</span><span style="color:#fdf4c1;">ix</span><span>, </span><span style="color:#fdf4c1;">val</span><span>)| {
+</span><span>        </span><span style="color:#fa5c4b;">if let </span><span>AugmentedValue::Possible(val) </span><span style="color:#fe8019;">=</span><span> val {
+</span><span>            </span><span style="color:#fabd2f;">Some</span><span>(val.</span><span style="color:#fabd2f;">clone</span><span>())
+</span><span>        } </span><span style="color:#fa5c4b;">else </span><span>{
+</span><span>            </span><span style="color:#fabd2f;">None
+</span><span>        }
+</span><span>    }) </span><span style="color:#fa5c4b;">else </span><span>{
+</span><span>        </span><span style="color:#fa5c4b;">if</span><span> sudoku.</span><span style="color:#fabd2f;">solved</span><span>() {
+</span><span>            </span><span style="color:#fa5c4b;">return </span><span>ControlFlow::Break(());
+</span><span>        } </span><span style="color:#fa5c4b;">else </span><span>{
+</span><span>            </span><span style="color:#fa5c4b;">return </span><span>ControlFlow::Continue(());
+</span><span>        }
+</span><span>    };
+</span><span>
+</span><span>    </span><span style="color:#fa5c4b;">for</span><span> value </span><span style="color:#fe8019;">in</span><span> possible {
+</span><span>        </span><span style="color:#fe8019;">*</span><span>sudoku.data.</span><span style="color:#fabd2f;">get_mut</span><span>(ix).</span><span style="color:#fabd2f;">unwrap</span><span>() </span><span style="color:#fe8019;">= </span><span>AugmentedValue::Fixed(value);
+</span><span>
+</span><span>        </span><span style="color:#fa5c4b;">if</span><span> sudoku.</span><span style="color:#fabd2f;">valid</span><span>() {
+</span><span>            </span><span style="color:#fabd2f;">augmented_solve</span><span>(sudoku)</span><span style="color:#fe8019;">?</span><span>;
+</span><span>        }
+</span><span>    }
+</span><span>
+</span><span>    </span><span style="color:#fe8019;">*</span><span>sudoku.data.</span><span style="color:#fabd2f;">get_mut</span><span>(ix).</span><span style="color:#fabd2f;">unwrap</span><span>() </span><span style="color:#fe8019;">= </span><span>AugmentedValue::Possible((</span><span style="color:#d3869b;">1</span><span style="color:#fe8019;">..=</span><span>sudoku.</span><span style="color:#fabd2f;">order</span><span>()).</span><span style="color:#fabd2f;">collect</span><span>());
+</span><span>
+</span><span>    ControlFlow::Continue(())
+</span><span>}
+</span></code></pre>
+<p>But this is basically a copy paste of the <code>naive_solve</code> algorithm, the value
+from this is that we can update the <code>possible</code> set in a cheaper way  while
+culling the a huge amount of possibilities:</p>
+<pre data-lang="rust" style="background-color:#282828;color:#fdf4c1aa;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#fa5c4b;">impl </span><span style="color:#8ec07c;">AugmentedSudoku </span><span>{
+</span><span>    </span><span style="color:#fa5c4b;">fn </span><span style="color:#8ec07c;">prune</span><span>(</span><span style="color:#fe8019;">&amp;</span><span style="color:#fa5c4b;">mut </span><span style="color:#fdf4c1;">self</span><span>) {
+</span><span>        </span><span style="color:#fa5c4b;">let</span><span> fixed_cols </span><span style="color:#fe8019;">= </span><span style="color:#fdf4c1;">self</span><span>.data.</span><span style="color:#fabd2f;">columns</span><span>().</span><span style="color:#fabd2f;">map</span><span>(|</span><span style="color:#fdf4c1;">col</span><span>| {
+</span><span>            col.</span><span style="color:#fabd2f;">filter_map</span><span>(|</span><span style="color:#fdf4c1;">val</span><span>| {
+</span><span>                </span><span style="color:#fa5c4b;">if let </span><span>AugmentedValue::Fixed(val) </span><span style="color:#fe8019;">=</span><span> val {
+</span><span>                    </span><span style="color:#fabd2f;">Some</span><span>(val)
+</span><span>                } </span><span style="color:#fa5c4b;">else </span><span>{
+</span><span>                    </span><span style="color:#fabd2f;">None
+</span><span>                }
+</span><span>            }).collect::&lt;HashSet&lt;</span><span style="color:#fe8019;">_</span><span>&gt;&gt;()
+</span><span>        });
+</span><span>
+</span><span>        </span><span style="font-style:italic;color:#928374;">// Remove fixed values in the same column
+</span><span>        </span><span style="color:#fa5c4b;">for</span><span> col, fixed </span><span style="color:#fe8019;">in </span><span style="color:#fdf4c1;">self</span><span>.data.</span><span style="color:#fabd2f;">mut_columns</span><span>().</span><span style="color:#fabd2f;">zip</span><span>(fixed_cols.</span><span style="color:#fabd2f;">into_iter</span><span>()) {
+</span><span>            </span><span style="color:#fa5c4b;">for</span><span> value </span><span style="color:#fe8019;">in</span><span> col.</span><span style="color:#fabd2f;">iter_mut</span><span>() {
+</span><span>                </span><span style="color:#fa5c4b;">if let </span><span>AugmentedValue::Possible(set) </span><span style="color:#fe8019;">=</span><span> value {
+</span><span>                    set </span><span style="color:#fe8019;">-=</span><span> fixed;
+</span><span>                }
+</span><span>            }
+</span><span>        }
+</span><span>
+</span><span>        </span><span style="font-style:italic;color:#928374;">// Repeat for rows and cells
+</span><span>    }
+</span><span>}
+</span></code></pre>
+<p>We can also perform a cheaper prunning each time we fix a value:</p>
+<pre data-lang="rust" style="background-color:#282828;color:#fdf4c1aa;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#fa5c4b;">impl </span><span style="color:#8ec07c;">AugmentedSudoku </span><span>{
+</span><span>    </span><span style="color:#fa5c4b;">fn </span><span style="color:#8ec07c;">fix_value</span><span>(</span><span style="color:#fe8019;">&amp;</span><span style="color:#fa5c4b;">mut </span><span style="color:#fdf4c1;">self</span><span>, </span><span style="color:#fdf4c1;">ix</span><span>: </span><span style="color:#fa5c4b;">usize</span><span>, </span><span style="color:#fdf4c1;">value</span><span>: NonZeroU8) {
+</span><span>        </span><span style="color:#fa5c4b;">let </span><span>(x, y, cell) </span><span style="color:#fe8019;">= </span><span style="color:#fdf4c1;">self</span><span>.</span><span style="color:#fabd2f;">split_ix</span><span>(ix);
+</span><span>
+</span><span>        </span><span style="color:#fdf4c1;">self</span><span>.</span><span style="color:#fabd2f;">remove_possible_value_from_column</span><span>(x, value);
+</span><span>        </span><span style="color:#fdf4c1;">self</span><span>.</span><span style="color:#fabd2f;">remove_possible_value_from_row</span><span>(y, value);
+</span><span>        </span><span style="color:#fdf4c1;">self</span><span>.</span><span style="color:#fabd2f;">remove_possible_value_from_cell</span><span>(cell, value);
+</span><span>    }
+</span><span>}
+</span></code></pre>
+
+    </main>
+
+        <footer>
+            <hr text="&copy; Copyright 2023" />
+            
+            <div class="footer-social-media">
+                <a onclick="toggle_prefers_color()">Toggle Theme</a>
+                
+                    <a href="https://mas.to/@teivel" target="_blank">Mastodon</a>
+                
+                    <a href="https://github.com/jalil-salame" target="_blank">Github</a>
+                
+            </div>
+            
+        </footer>
+    </body>
+
+    
+        <script src="https://jalil-salame.github.io/js/script.js"/></script>
+    
+</html>
