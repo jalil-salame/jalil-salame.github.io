@@ -22,7 +22,6 @@ navbar = [
   { name = "Mastodon", url = "https://mas.to/@teivel", rel="me" },
   { name = "Github", url = "https://github.com/jalil-salame", rel="me" }
 ]
-
 social_media = [
   { name = "Mastodon", url = "https://mas.to/@teivel", rel="me" },
   { name = "Github", url = "https://github.com/jalil-salame", rel="me" }
