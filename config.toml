@@ -12,6 +12,8 @@ minify_html = true
 # Whether to build a search index to be used later on by a JavaScript library
 build_search_index = false
 
+taxonomies = [{ name = "tags", feed = true }]
+
 [markdown]
 # Whether to do syntax highlighting
 # Theme can be customised by setting the `highlight_theme` variable to a theme supported by Zola
@@ -22,12 +24,12 @@ highlight_theme = "gruvbox-dark"
 author = "Jalil David Salamé Messina"
 username = "jalil-salame"
 navbar = [
-  { name = "Mastodon", url = "https://mas.to/@teivel", rel="me" },
-  { name = "Github", url = "https://github.com/jalil-salame", rel="me" }
+    { name = "Mastodon", url = "https://mas.to/@teivel", rel = "me" },
+    { name = "Github", url = "https://github.com/jalil-salame", rel = "me" },
 ]
 social_media = [
-  { name = "Mastodon", url = "https://mas.to/@teivel", rel="me" },
-  { name = "Github", url = "https://github.com/jalil-salame", rel="me" }
+    { name = "Mastodon", url = "https://mas.to/@teivel", rel = "me" },
+    { name = "Github", url = "https://github.com/jalil-salame", rel = "me" },
 ]
 
 [extra.content_license]

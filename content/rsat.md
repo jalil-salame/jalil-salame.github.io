@@ -2,6 +2,7 @@
 title = "(WIP) Rust SAT-solver"
 date = "2023-03-04"
 description = "A SAT solver in rust"
+[taxonomies]
 tags = ["sat", "rust", "programming"]
 +++
 

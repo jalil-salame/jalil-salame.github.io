@@ -2,6 +2,7 @@
 title = "N-Sudoku Solver"
 date = "2023-03-21"
 description = "A Generalized Sudoku solver In Rust"
+[taxonomies]
 tags = ["sudoku", "rust", "programming"]
 +++
 
