@@ -4,4 +4,4 @@
 [submodule "themes/dose"]
 	path = themes/dose
 	url = https://github.com/jalil-salame/dose.git
-    branch = social-rel
+    branch = site
