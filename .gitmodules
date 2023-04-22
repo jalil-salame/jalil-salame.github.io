@@ -3,4 +3,5 @@
 	url = https://github.com/ayushnix/kangae.git
 [submodule "themes/dose"]
 	path = themes/dose
-	url = https://github.com/oltdaniel/dose.git
+	url = https://github.com/jalil-salame/dose.git
+    branch = social-rel
