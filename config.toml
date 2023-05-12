@@ -9,12 +9,19 @@ compile_sass = true
 # Whether to build a search index to be used later on by a JavaScript library
 build_search_index = false
 
-taxomonies = [
-    {name = "tags"}
+# Explicitly set default language
+default_language = "en"
+
+# Enable taxonomies in default language
+taxonomies = [
+    { name = "tags" }
 ]
 
 [languages.de]
-# No specific translations
+# Enable taxonomies in german language
+taxonomies = [
+    { name = "tags" }
+]
 
 [markdown]
 # Whether to do syntax highlighting
@@ -24,6 +31,8 @@ highlight_theme = "visual-studio-dark"
 
 [extra]
 social_media = [
-    {name = "GitHub", url = "https://github.com/oltdaniel"},
-    {name = "Twitter", url = "https://twitter.com/@twitter"},
+    { name = "GitHub", url = "https://github.com/oltdaniel" },
+    { name = "Twitter", url = "https://twitter.com/@twitter" },
+    { name = "Mastodon", url = "https://mastodon.social/@Mastodon", rel = "me" }
 ]
+default_theme = "dark"
