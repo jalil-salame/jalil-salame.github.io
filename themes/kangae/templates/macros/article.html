@@ -1,0 +1,50 @@
+{% macro header(page) %}
+  <header class="article-header">
+    <p class="time-title">
+    {%- if page.date %}
+      <time datetime="{{ page.date | date }}">{{ page.date | date }}</time>
+    {% endif -%}
+    {%- if page.title %}
+      <strong class="post-title">{{ page.title }}</strong>
+    {% endif -%}
+    </p>
+    {%- if page.taxonomies and page.taxonomies.tags %}
+      <ul role="list">
+      {%- for tag in page.taxonomies.tags %}
+        <li role="listitem"><a class="tag" href="{{ get_taxonomy_url(kind="tags", name=tag) }}">{{ tag }}</a></li>
+      {% endfor -%}
+      </ul>
+    {% endif -%}
+  </header>
+{% endmacro %}
+
+{% macro content(page) %}
+  {{ page.content | safe }}
+{% endmacro %}
+
+{% macro footer(page) %}
+  {%- if config.extra.post_footer %}
+    {%- set foot = config.extra.post_footer -%}
+    <footer class="article-footer">
+      <ul role="list">
+        {%- if foot.share %}
+          <li role="listitem"><a href="{{ page.permalink | safe }}">share</a></li>
+        {% endif -%}
+        {%- if foot.discuss_github and foot.github_url and page.title %}
+          {%- set discuss = "/discussions/new?category=general&title=" -%}
+          <li role="listitem">
+            <a href="{{ foot.github_url | safe }}{{ discuss | safe }}{{ page.title | replace(from=" ", to="+") }}" target="_blank" rel="noopener noreferrer">discuss on github</a>
+          </li>
+        {% endif -%}
+        {%- if foot.misc %}
+          {%- for link in foot.misc %}
+            {%- if link.url and link.url is starting_with("https://") and link.url is not starting_with(config.base_url) %}
+              {%- set link_url = true %}
+            {% endif -%}
+            <li role="listitem"><a href="{{ link.url | safe }}"{% if link_url %} target="_blank" rel="noopener noreferrer"{% endif %}>{{ link.name }}</a></li>
+          {% endfor -%}
+        {% endif -%}
+      </ul>
+    </footer>
+  {% endif -%}
+{% endmacro %}
