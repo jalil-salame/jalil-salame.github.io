@@ -1,7 +1,0 @@
-[submodule "themes/kangae"]
-	path = themes/kangae
-	url = https://github.com/ayushnix/kangae.git
-[submodule "themes/dose"]
-	path = themes/dose
-	url = https://github.com/jalil-salame/dose.git
-    branch = site
