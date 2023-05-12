@@ -1,6 +1,7 @@
 {
   description = "My Blog/Website using Zola";
 
+  inputs.nixpkgs.url = "nixpkgs/nixos-unstable";
   inputs.flake-utils.url = "github:numtide/flake-utils";
 
   outputs = {
@@ -16,11 +17,15 @@
         checks = {};
         packages = rec {
           site = pkgs.stdenv.mkDerivation {
-            pname = "jalil-salame";
+            pname = "jalil-salame.github.io";
             version = "0.1.0";
             src = self;
             buildInputs = [pkgs.zola];
             buildPhase = "zola build";
+            installPhase = ''
+              mkdir -p $out
+              cp -r public/* $out
+            '';
           };
           default = site;
         };
