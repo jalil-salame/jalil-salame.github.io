@@ -2,7 +2,7 @@ name: Use Nix to build the Blog
 
 on:
   push:
-    branch: [main]
+    branches: [main]
   pull_request:
 
 jobs:
