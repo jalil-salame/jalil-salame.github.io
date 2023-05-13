@@ -13,23 +13,20 @@
     (
       system: let
         pkgs = nixpkgs.legacyPackages.${system};
+        site = pkgs.stdenv.mkDerivation {
+          pname = "jalil-salame.github.io";
+          version = "0.1.0";
+          src = self;
+          nativeBuildInputs = [pkgs.zola];
+          buildPhase = "zola build --output-dir $out";
+        };
       in {
         checks = {};
-        packages = rec {
-          site = pkgs.stdenv.mkDerivation {
-            pname = "jalil-salame.github.io";
-            version = "0.1.0";
-            src = self;
-            buildInputs = [pkgs.zola];
-            buildPhase = "zola build";
-            installPhase = ''
-              mkdir -p $out
-              cp -r public/* $out
-            '';
-          };
+        packages = {
+          inherit site;
           default = site;
         };
-        devShells.default = pkgs.mkShell {buildInputs = [pkgs.zola];};
+        devShells.default = pkgs.mkShell {inputsFrom = [site];};
         formatter = pkgs.alejandra;
       }
     );
