@@ -1,8 +1,6 @@
 name: Use Nix to build the Blog
 
 on:
-  push:
-    branches: [main]
   pull_request:
 
 jobs:
@@ -17,7 +15,3 @@ jobs:
         nix_conf: experimental-features = nix-command flakes
     - name: Build site
       run: nix build --print-build-logs
-    - name: Adjust permissions
-      run: |
-          chown -R "$(id -u):$(id -g)" ./result
-          chmod -R a+rwx ./result
