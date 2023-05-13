@@ -26,6 +26,9 @@
           inherit site;
           default = site;
         };
+        apps.default = flake-utils.lib.mkApp {
+          drv = pkgs.writeShellScriptBin "pages" "${pkgs.miniserve}/bin/miniserve --index ${site}/index.html ${site}";
+        };
         devShells.default = pkgs.mkShell {inputsFrom = [site];};
         formatter = pkgs.alejandra;
       }
