@@ -2,7 +2,7 @@ title = "Jalil's Blog"
 description = "Jalil's Blog where he explains stuff he has been working on... maybe..."
 # The URL the site will be built for
 base_url = "https://jalil-salame.github.io"
-theme = "kangae"
+theme = "dose"
 
 # Whether to automatically compile all Sass files in the sass directory
 compile_sass = true
@@ -31,17 +31,25 @@ username = "jalil-salame"
 keywords = ["microblog", "linux", "programming", "rust"]
 avatar = "images/jalil-salame_avatar.png"
 # Kangae
-navbar = [
-    { name = "Mastodon", url = "https://mas.to/@teivel", rel = "me" },
-    { name = "Github", url = "https://github.com/jalil-salame", rel = "me" },
-]
-# Dose
-social_media = [
-    { name = "Mastodon", url = "https://mas.to/@teivel", rel = "me" },
-    { name = "Github", url = "https://github.com/jalil-salame", rel = "me" },
-]
 light_theme_color = "#fbf1c7"
 dark_theme_color = "#282828"
+[[extra.navbar]]
+name = "Mastodon"
+url = "https://mas.to/@teivel"
+rel = "me"
+[[extra.navbar]]
+name = "Github"
+url = "https://github.com/jalil-salame"
+rel = "me"
+# Dose
+[[extra.social_media]] 
+name = "Mastodon"
+url = "https://mas.to/@teivel"
+rel = "me"
+[[extra.social_media]] 
+name = "Github"
+url = "https://github.com/jalil-salame"
+rel = "me"
 
 [extra.content_license]
 spdx = "CC BY-NC-SA 4.0"

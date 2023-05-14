@@ -16,7 +16,7 @@
         site = pkgs.stdenv.mkDerivation {
           pname = "jalil-salame.github.io";
           version = "0.1.0";
-          src = self;
+          src = ./.;
           nativeBuildInputs = [pkgs.zola];
           buildPhase = "zola build --output-dir $out";
         };
