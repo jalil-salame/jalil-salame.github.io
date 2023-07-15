@@ -9,6 +9,8 @@ tags = ["sat", "rust", "programming"]
 This is a (WIP) post about my (WIP) SAT solver:
 [rsat](https://github.com/jalil-salame/rsat)
 
+<!-- more -->
+
 # SAT
 
 The boolean Satisfiability Problem (SAT) is a famous NP-Complete problem (A very

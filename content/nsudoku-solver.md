@@ -9,6 +9,8 @@ tags = ["sudoku", "rust", "programming"]
 This is an in progress blog post about my sudoku solver:
 [nsudoku-solve](https://github.com/jalil-salame/nsudoku-solver)
 
+<!-- more -->
+
 # N-Sudoku Solver
 
 ## What is a Sudoku Puzzle?
