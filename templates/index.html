@@ -1,0 +1,14 @@
+{%- extends "kangae/templates/page.html" -%}
+
+{%- block main -%}
+  {%- for post in section.pages %}
+  <article>
+    {{ article::header(page=post) }}
+    {{ post.description | safe }}
+    {{ post.summary | safe }}
+    <br></br>
+    <a href="{{ post.permalink | safe }}">Continue Reading...</a>
+    {{ article::footer(page=post) }}
+  </article>
+  {% endfor -%}
+{%- endblock -%}
