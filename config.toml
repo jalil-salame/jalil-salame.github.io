@@ -2,21 +2,16 @@ title = "Jalil's Blog"
 description = "Jalil's Blog where he explains stuff he has been working on... maybe..."
 # The URL the site will be built for
 base_url = "https://jalil-salame.github.io"
-theme = "dose"
-
+theme = "kangae"
 # Whether to automatically compile all Sass files in the sass directory
 compile_sass = true
-
 # When set to "true", the generated HTML files are minified.
 minify_html = true
-
 # Whether to build a search index to be used later on by a JavaScript library
 build_search_index = false
-
 default_language = "en"
-
 generate_feed = true
-
+feed_filename = "atom.xml"
 taxonomies = [{ name = "tags", feed = true }]
 
 [markdown]
@@ -24,15 +19,28 @@ taxonomies = [{ name = "tags", feed = true }]
 # Theme can be customised by setting the `highlight_theme` variable to a theme supported by Zola
 highlight_code = true
 # highlight_theme = "gruvbox-dark"
+render_emoji = true
+external_links_no_follow = true
+external_links_no_referrer = true
+smart_punctuation = false
 
 [extra]
 author = "Jalil David Salamé Messina"
 username = "jalil-salame"
-keywords = ["microblog", "linux", "programming", "rust"]
 avatar = "images/jalil-salame_avatar.png"
+keywords = ["microblog", "linux", "programming", "rust"]
+
 # Kangae
 light_theme_color = "#fbf1c7"
 dark_theme_color = "#282828"
+[extra.favicon]
+# svg = "/images/favicon.svg"
+# png = "/images/favicon-32x32.png"
+# apple = "/images/apple-touch-icon.png"
+[extra.post_footer]
+share = true
+discuss_github = true
+github_url = "https://github.com/jalil-salame/jalil-salame.github.io"
 [[extra.navbar]]
 name = "Mastodon"
 url = "https://mas.to/@teivel"
@@ -41,6 +49,7 @@ rel = "me"
 name = "Github"
 url = "https://github.com/jalil-salame"
 rel = "me"
+
 # Dose
 [[extra.social_media]] 
 name = "Mastodon"
