@@ -27,7 +27,7 @@ crate for just about anything:
 - Serialization: `serde`
 - CLI interfaces: `clap`
 - Easy Enum errors: `justerror`
-- N-Dimentional Arrays: `ndarray`
+- N-Dimensional Arrays: `ndarray`
 - More Powerful Iterators: `itertools`
 - Web Server: `axum`
 - Middleware: `tower`
