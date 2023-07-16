@@ -143,7 +143,7 @@ references in order to access one element (the reference to the array, and the
 second reference because its an array of references).
 
 Here it is not a problem as arrays are stack allocated in Rust, therefore this
-is a contiguos chuk of memory, manipulating it will make your CPU very happy.
+is a contiguous chuk of memory, manipulating it will make your CPU very happy.
 It does have some pretty big drawbacks though:
 
 1. Stack space is limited.
@@ -165,7 +165,7 @@ It does have some pretty big drawbacks though:
    be a pain to implement a CLI around.
 
 For the above reasons we will instead be using the heap to store the Sudoku
-values, this is not as limiting as teh Stack, but tends to be slower.
+values, this is not as limiting as the Stack, but tends to be slower.
 
 I could implement a relatively generic 2D Array on the heap myself, but we want
 to imlpement a Sudoku solver, not an efficient 2D Array, so we will use an off
@@ -212,7 +212,7 @@ in simple terms, they automatically implement some functions on our types:
 - `Debug`: Allows debug formatting of our types:
   `println!("{my_debug_type:?}")`.
 - `Clone`: Allows our types to be cloned (create an in memory copy of the type).
-- `Copy`: Signals that `clone` is cheap (no additiona logic/small type), and
+- `Copy`: Signals that `clone` is cheap (no additional logic/small type), and
   that the values of this type should be copied, not moved.
 - `PartialEq/Eq`: Allows our type to be compared to itself (`my_type ==
   my_type_too`).
@@ -249,12 +249,12 @@ values:
 
 If you stare at these values for a bit, you can see their relationship: the
 _order_ is just the _grid width_ squared, and the number of cells, is just the
-_order_ squrared, therefore:
+_order_ squared, therefore:
 
 - `order = grid_w²`
 - `num_cells = order² = grid_w⁴`
 
-An interesting fact about computers is that calculationg the square of a number
+An interesting fact about computers is that calculating the square of a number
 is much faster than calculating the square root, especially for integers, Rust
 also doesn't have a way to express the integer square root of a number so you'd
 have to cast the number to a floating point value calculate the square root, and
@@ -307,7 +307,7 @@ we mark this function as _unsafe_ because the rest of the code assumes that
 
 Sometimes we can be sure that `grid_w` is right (ie. if we already have a Sudoku
 and are using its `grid_w` to create a new empty Sudoku). This way we can skip
-checking invariants which are upheld elsewere. Checking the invariant is simple
+checking invariants which are upheld elsewhere. Checking the invariant is simple
 though so we do still check it in debug builds to help with debugging if you do
 end up using this function wrong.
 
@@ -413,7 +413,7 @@ The code is prtty linear:
 3. We assert that there are no duplicate values in the rows, columns or cells.
 
 Using the `?` operator we forward the errors returned by the `Self::validate_*`
-functions, these unctions also take a buffer which we initialize appropiately to
+functions, these unctions also take a buffer which we initialize appropriately to
 make sure it is only allocated once, this prevents many small allocations.
 
 All three `validate_*` functions are very similar so we will only look at the
@@ -439,7 +439,7 @@ fn validate_rows_scratch(
 ///
 /// An axis could be a row, column or cell
 ///
-/// Passing an approriately sized (grid_w²) vector as scratch, makes this function not allocate
+/// Passing an appropriately sized (grid_w²) vector as scratch, makes this function not allocate
 /// any extra space
 fn invalid_sudoku_axis<'a, T, I>(
     axis: impl IntoIterator<Item = I>,
@@ -452,7 +452,7 @@ where
     for (i, a) in axis.into_iter().enumerate() {
         scratch.clear();
         scratch.extend(a.into_iter().copied());
-        if let Some(j) = Self::duplicate_value_positon(scratch) {
+        if let Some(j) = Self::duplicate_value_position(scratch) {
             return Some((i, j));
         }
     }
@@ -460,7 +460,7 @@ where
 }
 
 /// If there is a duplicate value, return its index
-fn duplicate_value_positon<T: PartialEq>(vals: &[T]) -> Option<usize> {
+fn duplicate_value_position<T: PartialEq>(vals: &[T]) -> Option<usize> {
     vals.iter()
         .enumerate()
         .position(|(i, val)| vals[i + 1..].contains(val))
