@@ -3,6 +3,17 @@ name: Deploy built Blog
 on:
   push:
     branches: [main]
+    paths:
+      # CI workflow
+      - '.github/workflows/nix-deploy.yaml'
+      # Website content
+      - 'content/**'
+      - 'static/**'
+      - 'templates/**'
+      - 'config.toml'
+      # Nix files
+      - 'flake.lock'
+      - 'flake.nix'
 
 jobs:
   build:
