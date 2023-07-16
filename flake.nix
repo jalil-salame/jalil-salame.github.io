@@ -23,7 +23,7 @@
           version = "2023-07-15";
           src = ./.;
           nativeBuildInputs = [pkgs.zola];
-          configurePhase = ''	
+          configurePhase = ''
             mkdir -p 'themes/${themeName}'
             cp -r ${theme}/* 'themes/${themeName}'
           '';
@@ -36,14 +36,16 @@
           default = site;
         };
         apps.default = flake-utils.lib.mkApp {
-          drv = pkgs.writeShellScriptBin "pages" "${pkgs.miniserve}/bin/miniserve --index ${site}/index.html ${site}";
+          drv =
+            pkgs.writeShellScriptBin "pages"
+            "${pkgs.miniserve}/bin/miniserve --interfaces=127.0.0.1 --index ${site}/index.html ${site}";
         };
         devShells.default = pkgs.mkShell {
-            inputsFrom = [site];
-            shellHook = ''
-                mkdir -p themes
-                ln -sn '${theme}' 'themes/${themeName}'
-            '';
+          inputsFrom = [site];
+          shellHook = ''
+            mkdir -p themes
+            ln -sn '${theme}' 'themes/${themeName}'
+          '';
         };
         formatter = pkgs.alejandra;
       }
