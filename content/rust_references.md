@@ -19,7 +19,7 @@ one it is?
 When I talk about references, I mean specifically the two types supported at a
 syntax level:
 
-- Immutable refereces (aka shared references `&`)
+- Immutable references (aka shared references `&`)
 - Mutable references (aka unique references `&mut`)
 
 They have some nice properties:
@@ -43,7 +43,7 @@ We can also see that `&mut >> &` and thus anything that you can do with
 
 It might seems like I just contradicted myself by saying that a `&mut` is more
 powerful than a `&`, because you can't copy a `&mut` reference, but you can copy
-a `&` reference. That is not a porblem though, because `&mut` is unique, we can
+a `&` reference. That is not a problem though, because `&mut` is unique, we can
 temporarily invalidate it, and get a `&` to it, this `&` can be copied as many
 times as we'd like, and once we are done with it, our original `&mut` will
 become valid again.
@@ -56,8 +56,8 @@ is, if you haven't yet, take a minute to think about it.
 We have three things that we can do with our references:
 
 - copy them
-- read the underlaying type
-- (paritally) overwrite the underlaying type
+- read the underlying type
+- (partially) overwrite the underlying type
 
 Memory safety makes copying references depend on them being writeable so we only
 have two degrees of freedom:
@@ -97,7 +97,7 @@ initialize it to a specific value because it is inefficient. Or you might want a
 safer thing, something that can remind you if you missed a field in a struct
 instead of leaving it uninitialized.
 
-Welcome to the *worst* Rust trait, I might be exagerating a bit, but I really
+Welcome to the *worst* Rust trait, I might be exaggerating a bit, but I really
 don't like it:
 
 ```rust
@@ -154,8 +154,8 @@ compiler, as it would need special handling.
 
 The ugly way to handle this you be to have a fallible `&out`, that means an
 `&out Result<T, Err>`, where you always have an initialized result, but the
-caller would need to aditionally allocate space for the `Result` type, which is
-a very bad way of hadling this.
+caller would need to additionally allocate space for the `Result` type, which is
+a very bad way of handling this.
 
 #### How do you deal with arrays?
 
@@ -171,12 +171,12 @@ ref is valid only in a certain range.
 
 I think `&out` refs are valuable and would solve a lot of problems with
 `MaybeUninit`, when working in constrained environments like embedded devices or
-the kernel. You need tighter controll over your storage, not everything can go
+the kernel. You need tighter control over your storage, not everything can go
 on the stack.
 
 Therefore, you might need to initialize resources directly on the heap and for
 that, the current tools are wildly inconvenient.
 
 Still, the proposed problems are very bad edgecases, and I don't think `&out`
-refs sould be added without atleast solving them. And the many more things I
+refs should be added without atleast solving them. And the many more things I
 have overlooked.
