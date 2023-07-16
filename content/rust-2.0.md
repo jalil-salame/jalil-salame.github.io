@@ -68,6 +68,6 @@ implement a language, they can learn from that and use it as a guide.
 
 ## Crates.io
 
-<!-- - [Namespacing](@/crates.io_namespacing.md) -->
+- [Namespacing](@/crates.io_namespacing.md)
 
 ## The Ecosystem
