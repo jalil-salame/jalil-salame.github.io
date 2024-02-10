@@ -2,3 +2,4 @@
 public/
 result
 themes/
+.pre-commit-config.yaml
