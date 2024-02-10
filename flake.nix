@@ -30,7 +30,7 @@
         let
           site = pkgs.stdenv.mkDerivation {
             pname = "jalil-salame.github.io";
-            version = "2023-07-15";
+            version = "2024-02-10";
             src = builtins.path { path = ./.; name = "blog"; };
             nativeBuildInputs = [ pkgs.zola ];
             configurePhase = ''
