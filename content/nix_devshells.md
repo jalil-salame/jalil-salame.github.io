@@ -6,10 +6,9 @@ description = "Deep dive into nix dev shells"
 tags = ["dev", "shell", "nix", "programming"]
 +++
 
-I use [NixOS][1] since last year and I recently started making
-use of `devShells` (development shells). They are very useful and more people
-should know about them! Especially in combination with
-[`direnv`][2].
+I use [NixOS][1] since last year and I recently started making use of
+`devShells` (development shells). They are very useful and more people should
+know about them! Especially when used in combination with [`direnv`][2].
 
 <!-- more -->
 
@@ -60,7 +59,7 @@ package you want to install needs to be specified as a *Flake URI*.
 
 Once you install [`direnv`][2] you should [hook it into your shell][5].
 
-## Getting started with Flakes
+## Getting started with Flakes and devShells
 
 Flakes are a simple file format used by [`nix`][1] to configure certain stuff.
 They tend to be used to build packages, but today we will be using them to
