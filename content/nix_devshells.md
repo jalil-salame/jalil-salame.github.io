@@ -104,11 +104,13 @@ Let's remove some redundancy:
 ```nix
 {
   # ...
-  outputs = { self, nixpkgs }: let 
-    system = "x86_64-linux";
-  in {
-    devShells.${system}.default = (import nixpkgs { system = system; }).mkShell { };
-  };
+  outputs = { self, nixpkgs }:
+    let
+      system = "x86_64-linux";
+    in
+    {
+      devShells.${system}.default = (import nixpkgs { system = system; }).mkShell { };
+    };
 }
 ```
 
@@ -117,12 +119,14 @@ And a bit more refactoring:
 ```nix
 {
   # ...
-  outputs = { self, nixpkgs }: let 
-    system = "x86_64-linux";
-    pkgs = import nixpkgs { system = system; };
-  in {
-    devShells.${system}.default = pkgs.mkShell { };
-  };
+  outputs = { self, nixpkgs }:
+    let
+      system = "x86_64-linux";
+      pkgs = import nixpkgs { system = system; };
+    in
+    {
+      devShells.${system}.default = pkgs.mkShell { };
+    };
 }
 ```
 
@@ -136,12 +140,14 @@ And we arrive to a basic flake with an empty `devShell`:
     nixpkgs.url = "nixpkgs/nixos-unstable";
   };
 
-  outputs = { self, nixpkgs }: let 
-    system = "x86_64-linux";
-    pkgs = import nixpkgs { system = system; };
-  in {
-    devShells.${system}.default = pkgs.mkShell { };
-  };
+  outputs = { self, nixpkgs }:
+    let
+      system = "x86_64-linux";
+      pkgs = import nixpkgs { system = system; };
+    in
+    {
+      devShells.${system}.default = pkgs.mkShell { };
+    };
 }
 ```
 
@@ -150,14 +156,16 @@ Now, this is not very useful as of now. So let's add some packages:
 ```nix
 {
   # ...
-  outputs = { self, nixpkgs }: let 
-    system = "x86_64-linux";
-    pkgs = import nixpkgs { system = system; };
-  in {
-    devShells.${system}.default = pkgs.mkShell {
-      packages = [ pkgs.python3 ];
+  outputs = { self, nixpkgs }:
+    let
+      system = "x86_64-linux";
+      pkgs = import nixpkgs { system = system; };
+    in
+    {
+      devShells.${system}.default = pkgs.mkShell {
+        packages = [ pkgs.python3 ];
+      };
     };
-  };
 }
 ```
 
@@ -165,7 +173,7 @@ Save the file as `flake.nix` into an empty directory and then you can make use
 of it:
 
 ```console
-$ cat > flake.nix <<<EOF
+$ cat > flake.nix <<EOF
 {
   description = "A friendly introduction to devShells";
 
@@ -173,14 +181,16 @@ $ cat > flake.nix <<<EOF
     nixpkgs.url = "nixpkgs/nixos-unstable";
   };
 
-  outputs = { self, nixpkgs }: let 
-    system = "x86_64-linux";
-    pkgs = import nixpkgs { system = system; };
-  in {
-    devShells.${system}.default = pkgs.mkShell {
-      packages = [ pkgs.python3 ];
+  outputs = { self, nixpkgs }:
+    let
+      system = "x86_64-linux";
+      pkgs = import nixpkgs { system = system; };
+    in
+    {
+      devShells.${system}.default = pkgs.mkShell {
+        packages = [ pkgs.python3 ];
+      };
     };
-  };
 }
 EOF
 $ python3 --version
