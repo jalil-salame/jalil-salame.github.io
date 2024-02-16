@@ -3,7 +3,7 @@ title = "Direnv and Nix devShells: A match made in heaven"
 date = "2024-02-10"
 description = "Deep dive into nix dev shells"
 [taxonomies]
-tags = ["sudoku", "rust", "programming"]
+tags = ["dev", "shell", "nix", "programming"]
 +++
 
 I use [NixOS][1] since last year and I recently started making
