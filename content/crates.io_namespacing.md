@@ -7,7 +7,7 @@ tags = ["rust", "crates.io", "language-design"]
 +++
 
 Crates.io is great in many ways, but falls short in some important
-places. This are my thoughts on missed oportunities and *interesting*
+places. This are my thoughts on missed opportunities and *interesting*
 design decitions.
 
 <!-- more -->

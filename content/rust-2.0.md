@@ -17,7 +17,7 @@ could be made to it.
 
 ## Do we want a Rust 2.0?
 
-I don't think so, a lot of the thoghts I will present are not backwards
+I don't think so, a lot of the thoughts I will present are not backwards
 compatible in a way that would split the language Python 3.0 style.
 
 The great thing about the current Rust ecosystem is that you can get a

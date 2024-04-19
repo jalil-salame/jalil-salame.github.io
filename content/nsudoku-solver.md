@@ -427,8 +427,8 @@ fn validate_rows_scratch(
     values: ArrayView2<Option<SudokuValue>>,
     vals: &mut Vec<Option<SudokuValue>>,
 ) -> Result<()> {
-    if let Some((iy, ix)) = Self::invalid_sudoku_axis(values.rows(), vals) {
-        return Err(SudokuError::WrongValueSet { pos: (ix, iy) });
+    if let Some((y, x)) = Self::invalid_sudoku_axis(values.rows(), vals) {
+        return Err(SudokuError::WrongValueSet { pos: (x, y) });
     }
     Ok(())
 }
