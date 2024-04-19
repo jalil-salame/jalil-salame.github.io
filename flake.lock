@@ -1,21 +1,5 @@
 {
   "nodes": {
-    "kangae": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1687311128,
-        "narHash": "sha256-ZFKvixwiM6RCP5/PPvv38r07vRLG76ny3gQwVN+QpC4=",
-        "owner": "ayushnix",
-        "repo": "kangae",
-        "rev": "b265935373f1fe73e17b968204b13738dc6d4136",
-        "type": "github"
-      },
-      "original": {
-        "owner": "ayushnix",
-        "repo": "kangae",
-        "type": "github"
-      }
-    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1713297878,
@@ -33,7 +17,6 @@
     },
     "root": {
       "inputs": {
-        "kangae": "kangae",
         "nixpkgs": "nixpkgs"
       }
     }
