@@ -7,11 +7,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout
-      uses: actions/checkout@v3
-    - name: Install Nix
-      uses: nixbuild/nix-quick-install-action@v22
-      with:
-        nix_conf: experimental-features = nix-command flakes
-    - name: Build site
-      run: nix build --print-build-logs
+    - uses: actions/checkout@v4
+    - uses: DeterminateSystems/nix-installer-action@v10
+    - uses: DeterminateSystems/magic-nix-cache-action@v4
+    - run: nix build --print-build-logs
+    # - name: Adjust permissions
+    #   run: |
+    #       chown -R "$(id -u):$(id -g)" ./result
+    #       chmod -R a+rwx ./result

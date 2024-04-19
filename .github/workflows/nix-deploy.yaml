@@ -13,26 +13,22 @@ on:
       - 'config.toml'
       # Nix files
       - 'flake.lock'
-      - 'flake.nix'
+      - '*.nix'
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout
-      uses: actions/checkout@v3
-    - name: Install Nix
-      uses: nixbuild/nix-quick-install-action@v22
-      with:
-        nix_conf: experimental-features = nix-command flakes
-    - name: Build site
-      run: nix build --print-build-logs
-    - name: Adjust permissions
-      run: |
-          chown -R "$(id -u):$(id -g)" ./result
-          chmod -R a+rwx ./result
+    - uses: actions/checkout@v4
+    - uses: DeterminateSystems/nix-installer-action@v10
+    - uses: DeterminateSystems/magic-nix-cache-action@v4
+    - run: nix build --print-build-logs
+    # - name: Adjust permissions
+    #   run: |
+    #       chown -R "$(id -u):$(id -g)" ./result
+    #       chmod -R a+rwx ./result
     - name: Upload artifact
-      uses: actions/upload-pages-artifact@v1
+      uses: actions/upload-pages-artifact@v3
       with:
         path: ./result
   deploy:
@@ -47,4 +43,4 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v2
+        uses: actions/deploy-pages@v4
