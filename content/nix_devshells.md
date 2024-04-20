@@ -333,8 +333,52 @@ various other utilities, but we didn't specify those anywhere... How come? Well,
 environment (`stdenv`) and are generally useful to have around when developing
 packages (which is the main use of `devShells`).
 
+There is no way to opt out of this behaviour (e.g. a `pkgs.mkShellNoCC`, but you
+could just copy the [derivation][5] and replace `stdenv` with `stdenvNoCC`).
+This is a strategy I encourage; just copy the code! Same thing with flake
+inputs or code in general.
+
+> **Brief aside on copying code:**
+>
+> Many times you look for some functionality which is not present, and you see a
+> library that does that so you add it as a dependency. This is good in some
+> cases (of the top of my head; large dependencies (lots of code you depend on),
+> complex dependencies (code you don't understand), and fast moving dependencies
+> (things that need to adapt, e.g. web standards/external APIs) but many times
+> you can get away with copying code (I'm looking at you `left-pad`).
+>
+> This is called `vendoring` dependencies and comes with some benefits, most of
+> which stem from owning the code; you no longer need to do PRs to other
+> projects (though if you find a fix it'd be nice if you did), and you do not
+> need to wait for new releases for stuff to be fixed. On the other hand, you
+> are responsible for the code.
+>
+> Obviously, follow the original license and credit the author, if for nothing
+> else than to have a quick link to the original source for when something
+> breaks c:.
+
+Brief aside over, lets look at what we've learned:
+
+1. We can use `devShells` to bring project specific dependencies without
+   installing them directly on our system.
+2. We can use `flakes` to pin those dependencies preventing a system update from
+   breaking things, and ensuring other developers (including you in the future)
+   have consistent dev environments that are (mostly) guaranteed to work.
+3. This is relatively easy and can be a valuable tool in your dev toolbox!
+
+Lastly, you can use [this template][7] to get started like so:
+
+```console
+$ mkdir test-devshell
+$ cd test-devshell
+$ nix flake init --template github:jalil-salame/shell.nix
+wrote: /path/to/test-devshell/flake.nix
+```
+
 [1]: <https://nixos.org> "NixOS"
 [2]: <https://github.com/direnv/direnv> "direnv GitHub"
 [3]: <https://github.com/NixOS/nixpkgs> "nixpkgs GitHub"
 [4]: <https://github.com/DeterminateSystems/nix-installer> "DeterminateSystems nix-installer"
 [5]: <https://github.com/direnv/direnv/blob/master/docs/hook.md> "Hook direnv into your shell"
+[6]: <https://github.com/NixOS/nixpkgs/blob/4c187ca71f8fabd9edc701d0755b2aafb318cb61/pkgs/build-support/mkshell/default.nix> "mkShell definition"
+[7]: <https://github.com/jalil-salame/shell.nix> "Jalil's nix devshell template"
