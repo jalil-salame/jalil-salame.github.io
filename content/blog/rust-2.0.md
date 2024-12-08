@@ -64,10 +64,10 @@ implement a language, they can learn from that and use it as a guide.
 
 ## The Language
 
-- [Rust Refs](@/rust_references.md)
+- [Rust Refs](@/blog/rust_references.md)
 
 ## Crates.io
 
-- [Namespacing](@/crates.io_namespacing.md)
+- [Namespacing](@/blog/crates.io_namespacing.md)
 
 ## The Ecosystem

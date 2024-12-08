@@ -19,4 +19,4 @@ they can generally be translated efficiently into each other, that means, if you
 solve one of the efficiently, you get an efficient solver for all of them.
 
 Many important problems are NP-Complete, ie. Rust's `match` statement validation
-is NP-Complete, and so is solving [Sudokus](@/nsudoku-solver.md)
+is NP-Complete, and so is solving [Sudokus](@/blog/nsudoku-solver.md)

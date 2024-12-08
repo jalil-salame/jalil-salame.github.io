@@ -6,7 +6,7 @@ insert_final_newline = true
 charset = utf-8
 indent_style = space
 
-[*.{md,nix}]
+[*.{md,nix,html,toml}]
 indent_size = 2
 
 [*.md]

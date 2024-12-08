@@ -2,16 +2,15 @@ title = "Jalil's Blog"
 description = "Jalil's Blog where he explains stuff he has been working on... maybe..."
 # The URL the site will be built for
 base_url = "https://jalil-salame.github.io"
-theme = "kangae"
+theme = "anemone"
 # Whether to automatically compile all Sass files in the sass directory
 compile_sass = true
 # When set to "true", the generated HTML files are minified.
-minify_html = true
+minify_html = false
 # Whether to build a search index to be used later on by a JavaScript library
 build_search_index = false
 default_language = "en"
-generate_feed = true
-feed_filename = "atom.xml"
+generate_feeds = true
 taxonomies = [{ name = "tags", feed = true }]
 
 [markdown]
@@ -29,6 +28,26 @@ author = "Jalil David Salamé Messina"
 username = "jalil-salame"
 avatar = "images/jalil-salame_avatar.png"
 keywords = ["microblog", "linux", "programming", "rust"]
+
+# anemone
+list_pages = true
+display_author = true
+header_nav = [
+  { url = "/", name_en = "/home/" },
+  { url = "/about", name_en = "/about/" },
+  { url = "/blog", name_en = "/blog/" },
+]
+
+[extra.footer.content.license]
+spdx = "CC BY-NC-SA 4.0"
+link = "https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode.txt"
+
+[extra.footer.code]
+link = "https://github.com/jalil-salame/jalil-salame.github.io"
+
+[extra.footer.code.license]
+spdx = "MIT"
+link = "https://mit-license.org/"
 
 # Kangae
 light_theme_color = "#fbf1c7"
@@ -51,11 +70,11 @@ url = "https://github.com/jalil-salame"
 rel = "me"
 
 # Dose
-[[extra.social_media]] 
+[[extra.social_media]]
 name = "Mastodon"
 url = "https://mas.to/@teivel"
 rel = "me"
-[[extra.social_media]] 
+[[extra.social_media]]
 name = "Github"
 url = "https://github.com/jalil-salame"
 rel = "me"
