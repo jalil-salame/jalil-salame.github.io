@@ -3,11 +3,12 @@
   zola,
   theme,
   themeName,
-}: stdenvNoCC.mkDerivation {
+}:
+stdenvNoCC.mkDerivation {
   pname = "jalil-salame.github.io";
   version = "2023-07-15";
   src = ./.;
-  nativeBuildInputs = [zola];
+  nativeBuildInputs = [ zola ];
   # Add theme to themes folder
   patchPhase = ''
     mkdir -p 'themes/${themeName}'

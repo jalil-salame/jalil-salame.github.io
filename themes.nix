@@ -1,4 +1,5 @@
-{fetchFromGitHub}: {
+{ fetchFromGitHub }:
+{
   kangae = fetchFromGitHub {
     owner = "ayushnix";
     repo = "kangae";
