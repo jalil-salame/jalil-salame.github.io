@@ -1,7 +1,7 @@
 title = "Jalil's Blog"
 description = "Jalil's Blog where he explains stuff he has been working on... maybe..."
 # The URL the site will be built for
-base_url = "https://jalil-salame.github.io"
+base_url = "https://jalil.salame.cl"
 theme = "anemone"
 # Whether to automatically compile all Sass files in the sass directory
 compile_sass = true
