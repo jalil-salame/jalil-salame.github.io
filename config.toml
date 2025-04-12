@@ -30,12 +30,13 @@ avatar = "images/jalil-salame_avatar.png"
 keywords = ["microblog", "linux", "programming", "rust"]
 
 # anemone
-list_pages = true
+list_pages = false
 display_author = true
 header_nav = [
   { url = "/", name_en = "/home/" },
   { url = "/about", name_en = "/about/" },
   { url = "/blog", name_en = "/blog/" },
+  { url = "/tags", name_en = "/tags/" },
 ]
 
 [extra.footer.content.license]

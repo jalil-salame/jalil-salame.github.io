@@ -1,4 +1,5 @@
 +++
+title = "Home"
 +++
 
 ## [About me](@/about.md)
@@ -16,5 +17,3 @@ You can get the feed if you want though: [feed](/atom.xml)
 - Github: {{ socials_link(handle="@jalil-salame", url="https://github.com/jalil-salame") }}
 - Mastodon: {{ socials_link(handle="@teivel@mas.to", url="https://mas.to/@teivel") }}
 - Elsewhere? I don't think so, at least not actively.
-
-## Pages
