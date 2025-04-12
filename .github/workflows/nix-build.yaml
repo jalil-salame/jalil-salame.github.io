@@ -1,17 +1,12 @@
 name: Use Nix to build the Blog
-
 on:
   pull_request:
-
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
-    - uses: DeterminateSystems/nix-installer-action@v10
-    - uses: DeterminateSystems/magic-nix-cache-action@v4
-    - run: nix build --print-build-logs
-    # - name: Adjust permissions
-    #   run: |
-    #       chown -R "$(id -u):$(id -g)" ./result
-    #       chmod -R a+rwx ./result
+      - uses: actions/checkout@v4
+      - uses: samueldr/lix-gha-installer-action@latest
+      - run: nix --version
+      - name: Build Blog
+        run: nix build --print-build-logs

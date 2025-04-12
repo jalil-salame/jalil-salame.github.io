@@ -136,8 +136,8 @@ let sudoku = [
 ```
 
 Contrary to your intuition if you come from a garbage collected language like
-Java, C# or Python, this is not incredibly innefficient; 2D arrays in most
-languages are very innefficient as you end up having an array of
+Java, C# or Python, this is not incredibly inefficient; 2D arrays in most
+languages are very inefficient as you end up having an array of
 pointers/references, an array of references is not ideal as you have to read two
 references in order to access one element (the reference to the array, and the
 second reference because its an array of references).
