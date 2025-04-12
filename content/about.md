@@ -6,9 +6,14 @@ My name is Jalil David Salamé Messina. I work on Trusted Execution Environments
 (TEEs) (mainly getting application to run on them) using Rust.
 
 You can find me on {{ socials_link(handle="Github", url="https://github.com/jalil-salame") }}
-creating pull requests and issues on [rust-lang/rust], [zkat/miette],
-[jcreekmore/timeout-readwrite-rs], [marshallpierce/base64-serde] and
-[obi1kenobi/trustfall-rustdoc-adapter].
+creating pull requests and issues on various repositories, some of my proudest
+are:
+
+- [rust-lang/rust]
+- [zkat/miette]
+- [jcreekmore/timeout-readwrite-rs]
+- [marshallpierce/base64-serde]
+- [obi1kenobi/trustfall-rustdoc-adapter]
 
 [rust-lang/rust]: <https://github.com/rust-lang/rust/pull/127534>
 [zkat/miette]: <https://github.com/zkat/miette/pull/409>
