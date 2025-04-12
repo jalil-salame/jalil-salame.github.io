@@ -60,8 +60,8 @@
           devShells.default = pkgs.mkShell {
             inputsFrom = [ site ];
             shellHook = ''
-              mkdir -p themes
-              ln -sn ${theme} themes/${themeName}
+              mkdir --parents themes
+              ln --symbolic --no-dereference --force ${theme} themes/${themeName}
             '';
           };
         };
