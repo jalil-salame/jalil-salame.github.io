@@ -1,0 +1,33 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "assignees": [
+    "jalil"
+  ],
+  "automerge": true,
+  "automergeStrategy": "auto",
+  "automergeType": "pr",
+  "commitBodyTable": true,
+  "dependencyDashboard": true,
+  "extends": [
+    "config:best-practices",
+    ":maintainLockFilesWeekly",
+    ":preserveSemverRanges"
+  ],
+  "prCreation": "immediate",
+  "cargo": {
+    "enabled": true
+  },
+  "nix": {
+    "enabled": true
+  },
+  "lockFileMaintenance": {
+    "enabled": true,
+    "recreateWhen": "always",
+    "rebaseWhen": "behind-base-branch",
+    "branchTopic": "lock-file-maintenance",
+    "commitMessageAction": "Lock file maintenance"
+  },
+  "automergeSchedule": [
+    "* 23 * * *"
+  ]
+}
