@@ -11,7 +11,7 @@
   anemone = fetchFromGitHub {
     owner = "Speyll";
     repo = "anemone";
-    rev = "dbbaa6c3be90f16b998f1be11363ee15e35da374"; # 2025-04-10
-    hash = "sha256-2IE5/wr0jcPGfk8jNogs/zsSpmD4XVUZx2x9dU1Sr8k=";
+    rev = "47b2085cb01f0e82fd83221aad79ab0b3d1702e0"; # 2025-04-10
+    hash = "sha256-vyB7gLKzTFLSEPPD4ylc3Uyj3WeKRFFklEnE58jn5JA=";
   };
 }
