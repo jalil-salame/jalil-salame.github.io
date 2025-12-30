@@ -406,7 +406,7 @@ pub fn validate_values(grid_w: usize, values: &[Option<SudokuValue>]) -> Result<
 }
 ```
 
-The code is prtty linear:
+The code is pretty linear:
 
 1. We assert that the number of values is grid_w⁴.
 2. We assert that the values are in the valid range (1..=grid_w²).
