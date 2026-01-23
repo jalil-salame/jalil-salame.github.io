@@ -24,16 +24,13 @@ jobs:
             .#checks."$SYSTEM"."$TEST"
   build:
     runs-on: nixos
-    outputs:
-      outPath: ${{ steps.build.outputs.outPath }}
     steps:
       - uses: https://git.salame.cl/actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
       - run: nix --version
       - name: Build Package
         id: build
         run: |
-          outPath=$(nix build --print-build-logs --print-out-paths .#)
-          echo "outPath=packages:site:$outPath" >> "$FORGEJO_OUTPUT"
+          nix build --print-build-logs .#
   report-size:
     runs-on: nixos
     needs: build
@@ -47,4 +44,3 @@ jobs:
           generate-artifact: ${{ github.ref_name == 'main' }}
           do-comparison: true
           job-name: report-size
-          prebuilt-derivations: "${{ needs.build.outputs.outPath }}"
