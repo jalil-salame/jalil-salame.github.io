@@ -75,7 +75,7 @@ reducing redundant downloads).
 {% aside() %}
 
 Although, <https://cache.nixos.org> is _technically_ a cache, since NixOS is a
-source base distribution, I would cosider it equivalent to a package
+source base distribution, I would consider it equivalent to a package
 repository.
 
 {% end %}
