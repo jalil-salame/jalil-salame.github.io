@@ -59,7 +59,7 @@ We have three things that we can do with our references:
 - read the underlying type
 - (partially) overwrite the underlying type
 
-Memory safety makes copying references depend on them being writeable so we only
+Memory safety makes copying references depend on them being writable so we only
 have two degrees of freedom:
 
 | Action     | `&mut` | `&` | `?` | `?` |
@@ -68,7 +68,7 @@ have two degrees of freedom:
 | `write`    | ✓      | ✗   | ✓   | ✗   |
 
 We can now fill in the `copy ref` action based on whether the references are
-writeable:
+writable:
 
 | Action     | `&mut` | `&` | `?` | `?` |
 |------------|--------|-----|-----|-----|
