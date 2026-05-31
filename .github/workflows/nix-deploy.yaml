@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6
-      - uses: samueldr/lix-gha-installer-action@latest
+      - uses: samueldr/lix-gha-installer-action@f5e94192f565f53d84f41a056956dc0d3183b343 # latest
       - run: nix --version
       - name: Build Blog
         run: nix build --print-build-logs
