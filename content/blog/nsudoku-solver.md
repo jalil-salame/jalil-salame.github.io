@@ -206,7 +206,7 @@ pub struct SudokuValue(NonZeroU8);
 ```
 
 If you are not familiar with Rust, these are
-[derive macros](https://doc.rust-lang.org/reference/procedural-macros.html#derive-macros),
+[derive macros](https://doc.rust-lang.org/reference/procedural-macros.html#r-macro.proc.derive),
 in simple terms, they automatically implement some functions on our types:
 
 - `Debug`: Allows debug formatting of our types:
