@@ -1,14 +1,15 @@
 +++
 title = "About me"
 date = "2025-04-12"
+path = "about"
 +++
+{%- set github = config.extra.socials.github %}
 
 My name is Jalil David Salamé Messina. I work on Trusted Execution Environments
-(TEEs) (mainly getting application to run on them) using Rust.
+(TEEs) (mainly getting applications to run on them) using Rust.
 
-You can find me on {{ socials_link(handle="Github", url="https://github.com/jalil-salame") }}
-creating pull requests and issues on various repositories, some of my proudest
-are:
+You can find me on {{ <socials platform={github} /> }} creating pull requests
+and issues on various repositories, some of my proudest are:
 
 - [rust-lang/rust]
 - [zkat/miette]

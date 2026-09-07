@@ -1,5 +1,0 @@
-<aside>
-
-  {{ body }}
-
-</aside>

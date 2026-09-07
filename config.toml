@@ -2,13 +2,13 @@ title = "Jalil's Blog"
 description = "Jalil's Blog where he explains stuff he has been working on... maybe..."
 # The URL the site will be built for
 base_url = "https://jalil.salame.cl"
-theme = "anemone"
+theme = "linkita"
 # Whether to automatically compile all Sass files in the sass directory
 compile_sass = true
 # When set to "true", the generated HTML files are minified.
 minify_html = false
 # Whether to build a search index to be used later on by a JavaScript library
-build_search_index = false
+build_search_index = true
 default_language = "en"
 generate_feeds = true
 taxonomies = [{ name = "tags", feed = true }]
@@ -26,6 +26,14 @@ style = "inline"
 light_theme = "gruvbox-light-hard"
 dark_theme = "gruvbox-dark-hard"
 
+[extra.socials.mastodon]
+handle = "@teivel@mas.to"
+url = "https://mas.to/@teivel"
+
+[extra.socials.github]
+handle = "GitHub@jalil-salame"
+url = "https://github.com/jalil-salame"
+
 [extra]
 author = "Jalil David Salamé Messina"
 username = "jalil-salame"
@@ -37,10 +45,31 @@ list_pages = false
 display_author = true
 header_nav = [
   { url = "/", name_en = "/home/" },
-  { url = "/about", name_en = "/about/" },
   { url = "/blog", name_en = "/blog/" },
   { url = "/tags", name_en = "/tags/" },
+  { url = "/about", name_en = "/about" },
 ]
+
+# linkita
+header_menu_name = "header_nav"
+
+[extra.menus]
+header_nav = [
+  { url = "@base/", name = "Home" },
+  { url = "@base/blog", name = "Blog" },
+  { url = "@base/tags", name = "Tags" },
+  { url = "@base/about", name = "About" },
+]
+
+[extra.profiles.jalil]
+name = "Jalil David Salamé Messina"
+bio = "I'll write something here once I stop being so shy about it."
+avatar_url = "images/jalil-salame_avatar.png"
+fediverse_creator = { handle = "teivel", domain = "mas.to" }
+
+[extra.footer]
+license_url = "https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode.txt"
+copyright = "&copy;&nbsp;$YEAR Jalil David Salamé Messina &vert; [CC BY-NC-SA 4.0]($LICENSE_URL)"
 
 [extra.footer.content.license]
 spdx = "CC BY-NC-SA 4.0"
@@ -54,35 +83,12 @@ spdx = "MIT"
 link = "https://mit-license.org/"
 
 # Kangae
-light_theme_color = "#fbf1c7"
-dark_theme_color = "#282828"
-[extra.favicon]
-# svg = "/images/favicon.svg"
-# png = "/images/favicon-32x32.png"
-# apple = "/images/apple-touch-icon.png"
 [extra.post_footer]
 share = true
 discuss_github = true
 github_url = "https://github.com/jalil-salame/jalil-salame.github.io"
-[[extra.navbar]]
-name = "Mastodon"
-url = "https://mas.to/@teivel"
-rel = "me"
-[[extra.navbar]]
-name = "Github"
-url = "https://github.com/jalil-salame"
-rel = "me"
 
 # Dose
-[[extra.social_media]]
-name = "Mastodon"
-url = "https://mas.to/@teivel"
-rel = "me"
-[[extra.social_media]]
-name = "Github"
-url = "https://github.com/jalil-salame"
-rel = "me"
-
 [extra.content_license]
 spdx = "CC BY-NC-SA 4.0"
 url = "https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode.txt"

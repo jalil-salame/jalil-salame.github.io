@@ -51,10 +51,10 @@ Not really, most linux package repositories sign their packages with a set of
 trusted keys, thus mirrors would need to sign the viruses with the main repo's
 keys, which isn't possible unless the main repo's keys are compromised.
 
-{% aside() %}
+{% <aside> %}
   If the keys are compromised, you probably have more issues than malware on the
   mirrors and you can easily revoke and rotate the compromised keys.
-{% end %}
+{% </aside> %}
 
 Even if the packages aren't signed, you could trust the mirror by trusting the
 organization that runs the mirror. If you were a student of the RWTH Aachen, you
@@ -72,13 +72,13 @@ reducing redundant downloads).
 
 [NixOS funding issue]: <https://discourse.nixos.org/t/2025-s3-sponsorship-more-resources-for-a-sustainable-nix/67019> "Discourse thread asking about solutions for funding the storage for cache.nixos.org"
 
-{% aside() %}
+{% <aside> %}
 
 Although, <https://cache.nixos.org> is _technically_ a cache, since NixOS is a
 source base distribution, I would consider it equivalent to a package
 repository.
 
-{% end %}
+{% </aside> %}
 
 Rust's [crates.io] receives about half a billion daily downloads, so I would
 expect it's bill to be similar if not bigger than NixOS. Since Rust has stronger
@@ -116,9 +116,9 @@ large transfers of data, so they tend to be bandwidth limited.
 
 ### Mirror security
 
-{% aside() %}
+{% <aside> %}
 Assuming you don't use a broken hash function like [md5] or [sha1].
-{% end %}
+{% </aside> %}
 
 [md5]: <https://en.wikipedia.org/wiki/MD5#Overview_of_security_issues>
 "Wikipedia page on MD5 and its security issues"
